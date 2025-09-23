@@ -1,0 +1,48 @@
+name: CI/CD to AWS Fargate with DockerHub
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-test-push-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v3
+
+      - name: Configurar JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Construir con Maven
+        run: mvn -B package --file pom.xml
+
+      - name: Ejecutar tests
+        run: mvn test
+
+      - name: Login en DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build y Push DockerHub
+        run: |
+          IMAGE=${{ secrets.DOCKER_USERNAME }}/springboot-ci-cd-demo:latest
+          docker build -t $IMAGE .
+          docker push $IMAGE
+
+      - name: Configurar credenciales AWS
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Actualizar servicio ECS
+        run: |
+          aws ecs update-service             --cluster springboot-demo-cluster             --service springboot-demo-service             --force-new-deployment
