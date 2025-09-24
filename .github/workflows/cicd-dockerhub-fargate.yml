@@ -45,7 +45,4 @@ jobs:
 
       - name: Actualizar servicio ECS
         run: |
-          aws ecs update-service |
-          --cluster springboot-demo-cluster-con-alb |
-          --service cicd-demo-service-e2ow84ch |
-          --force-new-deployment
+          aws ecs update-service --cluster springboot-demo-cluster-con-alb --service cicd-demo-service-e2ow84ch | --force-new-deployment
