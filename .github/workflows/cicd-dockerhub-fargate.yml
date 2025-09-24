@@ -43,6 +43,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Actualizar servicio ECS
+      - name: Actualizar servicio ECS cambio random
         run: |
           aws ecs update-service --cluster springboot-demo-cluster-con-alb --service cicd-demo-service-e2ow84ch --force-new-deployment
