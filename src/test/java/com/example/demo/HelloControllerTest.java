@@ -22,5 +22,7 @@ class HelloControllerTest {
         String body = this.restTemplate.getForObject("/hello", String.class);
         assertThat(body).isEqualTo(expectedMessage);
     }
+
+    
 }
 
