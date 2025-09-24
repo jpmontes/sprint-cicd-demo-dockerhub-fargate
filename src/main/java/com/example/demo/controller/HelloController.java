@@ -8,6 +8,6 @@ public class HelloController {
 
     @GetMapping("/hello")
     public String hello() {
-        return "Hello CI/CD with GitHub Actions and Docker!";
+        return "Hello CI/CD with GitHub Actions and Docker! Cambio para probar pipeline";
     }
 }
