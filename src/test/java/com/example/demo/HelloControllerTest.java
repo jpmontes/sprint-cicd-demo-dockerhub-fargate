@@ -1,16 +1,26 @@
 package com.example.demo;
 
-import com.example.demo.controller.HelloController;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class HelloControllerTest {
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+class HelloControllerTest {
 
-    private final HelloController controller = new HelloController();
+    @Autowired
+    private TestRestTemplate restTemplate;
+
+    @Value("${hello.message}")
+    private String expectedMessage;    
 
     @Test
-    void testHello() {
-        String response = controller.hello();
-        assertThat(response).isEqualTo("Hello CI/CD with GitHub Actions and Docker! Cambio para probar pipeline");
+    void helloEndpointShouldReturnMessage() {
+        String body = this.restTemplate.getForObject("/hello", String.class);
+        assertThat(body).isEqualTo(expectedMessage);
     }
 }
+
