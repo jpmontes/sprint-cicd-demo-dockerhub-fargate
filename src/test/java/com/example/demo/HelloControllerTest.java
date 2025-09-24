@@ -11,6 +11,6 @@ public class HelloControllerTest {
     @Test
     void testHello() {
         String response = controller.hello();
-        assertThat(response).isEqualTo("Hello CI/CD with GitHub Actions and Docker!");
+        assertThat(response).isEqualTo("Hello CI/CD with GitHub Actions and Docker! Cambio para probar pipeline");
     }
 }
